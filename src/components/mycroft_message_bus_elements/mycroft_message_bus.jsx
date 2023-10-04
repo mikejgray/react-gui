@@ -19,14 +19,17 @@ export default class MycroftMessageBus extends Component {
 	}
 
 	connectToCoreWebSocket() {
-		var ws = new WebSocket("ws://localhost:8181/core");
-		ws.onopen = (event) => {
-			this.updateWebSocketReadyState(ws);
-			this.announceConnection(ws);
+		// TODO: Build URL from config (ssl, host, port, route)
+		var gui_ws = new WebSocket(`ws://localhost:18181/gui`);
+		this.handleGuiMessages(gui_ws);
+		// var ws = new WebSocket("ws://localhost:8181/core");
+		gui_ws.onopen = (event) => {
+			this.updateWebSocketReadyState(gui_ws);
+			this.announceConnection(gui_ws);
 		};
-		this.handleCoreMessages(ws);
-		ws.onclose = () => {
-			this.updateWebSocketReadyState(ws);
+		// this.handleCoreMessages(ws);
+		gui_ws.onclose = () => {
+			this.updateWebSocketReadyState(gui_ws);
 		};
 	}
 
@@ -42,56 +45,74 @@ export default class MycroftMessageBus extends Component {
 	}
 
 	announceConnection(web_socket) {
+		console.log('announcing connection')
 		web_socket.send(
 			JSON.stringify({
 				type: "mycroft.gui.connected",
 				data: {
 					gui_id: "js_gui",
+					framework: "react"
 				},
 			})
 		);
 	}
 
-	handleCoreMessages(web_socket) {
+	// handleCoreMessages(web_socket) {
+	// 	let setFaceState = (active) => {
+	// 		this.setState({ "face.active": active });
+	// 	};
+	// 	web_socket.onmessage = (event) => {
+	// 		var msg = JSON.parse(event.data);
+	// 		switch (msg.type) {
+	// 			case "recognizer_loop:audio_output_start":
+	// 				setFaceState(true);
+	// 				break;
+	// 			case "recognizer_loop:audio_output_end":
+	// 				setFaceState(false);
+	// 				break;
+	// 			case "mycroft.ready":
+	// 				console.log("Mycroft is ready.");
+	// 				break;
+	// 			case "mycroft.gui.port":
+	// 				console.log(msg.type);
+	// 				console.log(`connecting to mycroft gui at port: ${msg.data["port"]}`);
+	// 				var gui_ws = new WebSocket(`ws://localhost:18181/gui`);
+	// 				this.handleGuiMessages(gui_ws);
+	// 				break;
+	// 			default:
+	// 			// Log unhandled messages
+	// 			// console.log("Unhandled message type: " + msg.type);
+	// 		}
+	// 	};
+	// }
+
+	handleGuiMessages(gui_ws) {
 		let setFaceState = (active) => {
 			this.setState({ "face.active": active });
 		};
-		web_socket.onmessage = (event) => {
-			var msg = JSON.parse(event.data);
-			switch (msg.type) {
-				case "recognizer_loop:audio_output_start":
-					setFaceState(true);
-					break;
-				case "recognizer_loop:audio_output_end":
-					setFaceState(false);
-					break;
-				case "mycroft.ready":
-					console.log("Mycroft is ready.");
-					break;
-				case "mycroft.gui.port":
-					console.log(msg.type);
-					console.log(`connecting to mycroft gui at port: ${msg.data["port"]}`);
-					var gui_ws = new WebSocket(`ws://localhost:${msg.data["port"]}/gui`);
-					this.handleGuiMessages(gui_ws);
-					break;
-				default:
-				// Log unhandled messages
-				// console.log("Unhandled message type: " + msg.type);
-			}
-		};
-	}
-
-	handleGuiMessages(gui_ws) {
 		gui_ws.onmessage = (event) => {
 			let gui_msg = JSON.parse(event.data);
+
 			let component_namespace_state = Object.assign(
 				{},
 				this.state[gui_msg.namespace]
 			);
 			switch (gui_msg.type) {
+				case "recognizer_loop:audio_output_start":
+					console.log(`audio_output_start`)
+					setFaceState(true);
+					break;
+				case "recognizer_loop:audio_output_end":
+					console.log(`audio_output_end`)
+					setFaceState(false);
+					break;
+				case "mycroft.ready":
+					console.log("Mycroft is ready.");
+					break;
 				case "mycroft.session.list.insert":
 					// Insert a new and reset existing skill namespace under mycroft.system.active_skill in state
 					let skill_id = gui_msg.data[0]["skill_id"];
+					console.log(`got update from ${skill_id}`)
 					return this.setState({
 						[gui_msg.namespace]: skill_id,
 						[skill_id]: null,
@@ -102,6 +123,7 @@ export default class MycroftMessageBus extends Component {
 						component_namespace_state,
 						gui_msg.data
 					);
+					console.log(`got updated data: ${gui_msg.data}`)
 					return this.setState({
 						[gui_msg.namespace]: merged_namespace_state,
 					});
@@ -113,6 +135,9 @@ export default class MycroftMessageBus extends Component {
 					};
 					// iterate through page_urls only adding the component name to the array
 					let page_list = gui_msg.data.map((i) => filter_url(i["url"]));
+					console.log(`got pages: ${page_list}`)
+
+					// TODO: Build list of resolvable pages here
 					// assign pages list and determine page and component to focus
 					component_namespace_state["components"] = page_list;
 					component_namespace_state["component_focus"] = gui_msg.position;
@@ -121,6 +146,7 @@ export default class MycroftMessageBus extends Component {
 						[gui_msg.namespace]: component_namespace_state,
 					});
 				case "mycroft.events.triggered":
+					console.log(`event triggered: ${gui_msg.event_name}`)
 					// Used to switch page within currently active namespace if page focus event
 					if (gui_msg.event_name == "page_gained_focus") {
 						let resetDisplayEvent = () => {
