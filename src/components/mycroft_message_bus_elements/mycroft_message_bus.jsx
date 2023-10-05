@@ -24,6 +24,7 @@ export default class MycroftMessageBus extends Component {
 		this.handleGuiMessages(gui_ws);
 		// var ws = new WebSocket("ws://localhost:8181/core");
 		gui_ws.onopen = (event) => {
+			console.log("Websocket connection established")
 			this.updateWebSocketReadyState(gui_ws);
 			this.announceConnection(gui_ws);
 		};
@@ -46,13 +47,12 @@ export default class MycroftMessageBus extends Component {
 
 	announceConnection(web_socket) {
 		console.log('announcing connection')
+		// qt implemented messages where `type` maps to `Message.msg_type` and all other keys map into `Message.data`
 		web_socket.send(
 			JSON.stringify({
 				type: "mycroft.gui.connected",
-				data: {
-					gui_id: "js_gui",
-					framework: "react"
-				},
+				gui_id: "js_gui",
+				framework: "react"
 			})
 		);
 	}
@@ -134,10 +134,10 @@ export default class MycroftMessageBus extends Component {
 							.replace(".qml", "");
 					};
 					// iterate through page_urls only adding the component name to the array
-					let page_list = gui_msg.data.map((i) => filter_url(i["url"]));
+					let page_list = gui_msg.data.map((i) => i["url"]);
 					console.log(`got pages: ${page_list}`)
 
-					// TODO: Build list of resolvable pages here
+					// page_list should be a list of resolvable URIs (file:// or http://) now
 					// assign pages list and determine page and component to focus
 					component_namespace_state["components"] = page_list;
 					component_namespace_state["component_focus"] = gui_msg.position;
