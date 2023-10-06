@@ -4,16 +4,25 @@ The React-Mycroft-Gui is an out-of-the-box solution for a GUI using the Mycroft 
 
 While it works without configuration for certain skills that currently have templates, it's easily extensible, and can be used with any Mycroft skill that outputs messages on the gui message bus.
 
-# Setup
+## Docker
+A `Dockerfile` is included for convenient deployment. To build and run:
+# TODO: Document volume mapping for GUI resources (/app/src/)
+```shell
+docker build . -t react-gui
+docker run -d --name=react-gui --network=host react-gui
+```
+GUI Files should be mapped to the container path /app/src/components/gui_files
+
+## Setup
 
 Simply clone, install dependencies with 'npm install', and run with 'npm start'
 
-# Test
+## Test
 
 To test, you can use an existing gui template, run Mycroft and ask something like:
 "Wiki {query}"
 
-# Adding your own interfaces
+## Adding your own interfaces
 
 All skills in the React-Mycroft-Gui are referenced from the `skill_component_handler.jsx`,
 <br> which resides in `src < components < mycroft_messagebus_elements`. <br>

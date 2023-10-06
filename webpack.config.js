@@ -1,5 +1,4 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require("path");
 
 module.exports = {
@@ -14,19 +13,14 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: "./public/index.html",
-        }),
-        new CopyWebpackPlugin({
-            patterns: [{
-                from: 'src/components/gui_files/**/*.js*',
-                to: path.join(__dirname, 'components', 'gui_files')
-            }]
         })
     ],
     resolve: {
         modules: [__dirname, "src", "node_modules"],
         extensions: ["*", ".js", ".jsx", ".tsx", ".ts", ".css"],
         alias: {
-            'gui': path.join(__dirname, 'components', 'gui_files')
+            GUI: path.join(__dirname, 'src', 'components', 'gui_files'),
+            CORE: path.join(__dirname, 'src', 'components', 'mycroft_message_bus_elements', 'core_components')
         }
     },
     module: {

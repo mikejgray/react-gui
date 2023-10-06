@@ -5,6 +5,7 @@ import { MycroftDateTime } from "./skill_components/mycroft_date_time";
 import { MycroftIp } from "./skill_components/mycroft_ip";
 import { MycroftWiki } from "./skill_components/mycroft_wiki";
 import { MycroftWeather } from "./skill_components/mycroft_weather/mycroft_weather";
+import {default as SYSTEM_TextFrame} from "GUI/system/react/SYSTEM_TextFrame"
 
 export default function SkillComponentHandler(props) {
 	function returnActiveSkillComponent() {
@@ -53,21 +54,47 @@ export default function SkillComponentHandler(props) {
 				);
 			default:
 				if ( component_name.endsWith('.qml')) {
+					console.log(`ERROR: Ignoring request for ${component_name}`)
 					return null
 				}
 				console.log(`Loading ${component_name}`);
-				// ../system/react/SYSTEM_TextFrame.jsx
-
-				const RenderPage = lazy(() => import(`${component_name}`));
-				console.log(RenderPage)
-				return (
-					<Suspense fallback={"Loading"}>
-						<RenderPage
+				try {
+					let resource_name = String(component_name).substring(component_name.lastIndexOf('/') + 1)
+					resource_name = resource_name.substring(0, component_name.lastIndexOf('.'))
+					console.log(`Resolved ${resource_name}`)
+					return (
+						<SYSTEM_TextFrame  // TODO: Map resource_name to imported resources
 							skillState={skill_state}
 							componentName={component_name}
 						/>
-					</Suspense>
-				);
+					);
+				}
+				catch (e) {
+					console.log(e)
+					return null;
+				}
+				// try {
+				// 	const RenderPage = lazy(() => import(`${component_name}`)
+				// 		.catch((e) => {
+				// 			// Import error; maybe this resource isn't defined for React?
+				// 			console.log(e);
+				// 			return null;
+				// 		}));
+				// 	console.log(RenderPage)
+				// 	return (
+				// 		<Suspense fallback={"Loading"}>
+				// 			<RenderPage
+				// 				skillState={skill_state}
+				// 				componentName={component_name}
+				// 			/>
+				// 		</Suspense>
+				// 	);
+				// }
+				// catch(e) {
+				// 	// Some error occurred and there isn't a new page to render
+				// 	console.log(e)
+				// 	return null
+				// }
 		}
 	}
 
