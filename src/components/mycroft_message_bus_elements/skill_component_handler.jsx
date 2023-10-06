@@ -5,15 +5,8 @@ import { MycroftDateTime } from "./skill_components/mycroft_date_time";
 import { MycroftIp } from "./skill_components/mycroft_ip";
 import { MycroftWiki } from "./skill_components/mycroft_wiki";
 import { MycroftWeather } from "./skill_components/mycroft_weather/mycroft_weather";
-import {default as SYSTEM_TextFrame} from "GUI/system/react/SYSTEM_TextFrame"
-import {default as SYSTEM_ImageFrame} from "GUI/system/react/SYSTEM_ImageFrame"
-import {default as SYSTEM_AnimatedImageFrame} from "GUI/system/react/SYSTEM_AnimatedImageFrame"
-
-const system_components = {
-	SYSTEM_TextFrame,
-	SYSTEM_ImageFrame,
-	SYSTEM_AnimatedImageFrame
-}
+import {skill_components} from "./skills";
+import {system_components} from "./system";
 
 export default function SkillComponentHandler(props) {
 	function returnActiveSkillComponent() {
@@ -70,9 +63,12 @@ export default function SkillComponentHandler(props) {
 					let resource_name = String(component_name).substring(component_name.lastIndexOf('/') + 1)
 					resource_name = resource_name.substring(0, resource_name.lastIndexOf('.'))
 					console.log(`Getting component: ${resource_name}`)
-					// TODO: if Component.startswith(SYSTEM)
-					let Component = system_components[resource_name];
-					// TODO: Support skill components?
+					let Component
+					if (resource_name.startsWith("SYSTEM")) {
+						Component = system_components[resource_name];
+					} else {
+						Component = skill_components[resource_name]
+					}
 					console.log(Component)
 					return (
 						<Component
