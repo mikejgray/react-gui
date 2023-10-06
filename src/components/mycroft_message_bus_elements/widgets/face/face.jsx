@@ -5,7 +5,7 @@ import "./assets/css/face.css";
 
 export function Face(props) {
 	let faceState =
-	(props.active == true) ? activeFace : restingFace;
+	(props.active === true) ? activeFace : restingFace;
 
 	return <img src={faceState} className="face row" alt="logo" />;
 }

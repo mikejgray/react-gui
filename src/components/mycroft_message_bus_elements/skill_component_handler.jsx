@@ -1,4 +1,4 @@
-import React, {Component, lazy, Suspense} from "react";
+import React, {Component} from "react";
 import "./default.scss";
 import { GuiExamplesAiix } from "./skill_components/gui_examples_aiix";
 import { MycroftDateTime } from "./skill_components/mycroft_date_time";
@@ -6,6 +6,14 @@ import { MycroftIp } from "./skill_components/mycroft_ip";
 import { MycroftWiki } from "./skill_components/mycroft_wiki";
 import { MycroftWeather } from "./skill_components/mycroft_weather/mycroft_weather";
 import {default as SYSTEM_TextFrame} from "GUI/system/react/SYSTEM_TextFrame"
+import {default as SYSTEM_ImageFrame} from "GUI/system/react/SYSTEM_ImageFrame"
+import {default as SYSTEM_AnimatedImageFrame} from "GUI/system/react/SYSTEM_AnimatedImageFrame"
+
+const system_components = {
+	SYSTEM_TextFrame,
+	SYSTEM_ImageFrame,
+	SYSTEM_AnimatedImageFrame
+}
 
 export default function SkillComponentHandler(props) {
 	function returnActiveSkillComponent() {
@@ -60,10 +68,14 @@ export default function SkillComponentHandler(props) {
 				console.log(`Loading ${component_name}`);
 				try {
 					let resource_name = String(component_name).substring(component_name.lastIndexOf('/') + 1)
-					resource_name = resource_name.substring(0, component_name.lastIndexOf('.'))
-					console.log(`Resolved ${resource_name}`)
+					resource_name = resource_name.substring(0, resource_name.lastIndexOf('.'))
+					console.log(`Getting component: ${resource_name}`)
+					// TODO: if Component.startswith(SYSTEM)
+					let Component = system_components[resource_name];
+					// TODO: Support skill components?
+					console.log(Component)
 					return (
-						<SYSTEM_TextFrame  // TODO: Map resource_name to imported resources
+						<Component
 							skillState={skill_state}
 							componentName={component_name}
 						/>
@@ -73,28 +85,6 @@ export default function SkillComponentHandler(props) {
 					console.log(e)
 					return null;
 				}
-				// try {
-				// 	const RenderPage = lazy(() => import(`${component_name}`)
-				// 		.catch((e) => {
-				// 			// Import error; maybe this resource isn't defined for React?
-				// 			console.log(e);
-				// 			return null;
-				// 		}));
-				// 	console.log(RenderPage)
-				// 	return (
-				// 		<Suspense fallback={"Loading"}>
-				// 			<RenderPage
-				// 				skillState={skill_state}
-				// 				componentName={component_name}
-				// 			/>
-				// 		</Suspense>
-				// 	);
-				// }
-				// catch(e) {
-				// 	// Some error occurred and there isn't a new page to render
-				// 	console.log(e)
-				// 	return null
-				// }
 		}
 	}
 

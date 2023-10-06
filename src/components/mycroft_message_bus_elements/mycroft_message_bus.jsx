@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { Face } from "./widgets/face/face";
+// import { Face } from "./widgets/face/face";
 import SkillComponent from "./skill_component_handler";
 
 export default class MycroftMessageBus extends Component {
@@ -20,7 +20,7 @@ export default class MycroftMessageBus extends Component {
 
 	connectToCoreWebSocket() {
 		// TODO: Build URL from config (ssl, host, port, route)
-		var gui_ws = new WebSocket(`ws://localhost:18181/gui`);
+		const gui_ws = new WebSocket(`ws://localhost:18181/gui`);
 		this.handleGuiMessages(gui_ws);
 		// var ws = new WebSocket("ws://localhost:8181/core");
 		gui_ws.onopen = (event) => {
@@ -128,11 +128,11 @@ export default class MycroftMessageBus extends Component {
 						[gui_msg.namespace]: merged_namespace_state,
 					});
 				case "mycroft.gui.list.insert":
-					let filter_url = (page_url) => {
-						return page_url
-							.substring(page_url.lastIndexOf("/") + 1)
-							.replace(".qml", "");
-					};
+					// let filter_url = (page_url) => {
+					// 	return page_url
+					// 		.substring(page_url.lastIndexOf("/") + 1)
+					// 		.replace(".qml", "");
+					// };
 					// iterate through page_urls only adding the component name to the array
 					let page_list = gui_msg.data.map((i) => i["url"]);
 					console.log(`got pages: ${page_list}`)
@@ -186,7 +186,7 @@ export default class MycroftMessageBus extends Component {
 				) {
 			return (
 				<>
-					<Face active={this.state["face.active"]} />
+					{/*<Face active={this.state["face.active"]} />*/}
 					<SkillComponent
 						activeSkill={active_skill}
 						skillState={active_skill_state}
@@ -194,7 +194,7 @@ export default class MycroftMessageBus extends Component {
 				</>
 			);
 		}
-		return <Face active={this.state["face.active"]} />
+		return null;  //<Face active={this.state["face.active"]} />
 	}
 
 	render() {
