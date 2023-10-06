@@ -98,10 +98,10 @@ export default class MycroftMessageBus extends Component {
 				this.state[gui_msg.namespace]
 			);
 			switch (gui_msg.type) {
-				case "recognizer_loop:audio_output_start":
-					console.log(`audio_output_start`)
-					setFaceState(true);
-					break;
+				// case "recognizer_loop:audio_output_start":
+				// 	console.log(`audio_output_start`)
+				// 	setFaceState(true);
+				// 	break;
 				case "recognizer_loop:audio_output_end":
 					console.log(`audio_output_end`)
 					setFaceState(false);
