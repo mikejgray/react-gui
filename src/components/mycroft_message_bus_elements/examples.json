@@ -1,0 +1,26 @@
+{
+    "skill-fallback_unknown.neongeckocom": {
+        "utterance": "flip the coin"
+    },
+    "skill-ovos-ddg.openvoiceos": {
+        "summary": "Coin flipping, coin tossing, or heads or tails is the practice of throwing a coin in the air and checking which side is showing when it lands, in order to randomly choose between two alternatives, heads or tails, sometimes used to resolve a dispute between two parties.",
+        "imgLink": "https://duckduckgo.com/i/8282aecc.jpg"
+    },
+    "skill-randomness.mikejgray": {
+        "text": "heads"
+    },
+    "skill-wikipedia.neongeckocom": {
+        "image": "/home/neon/venv/lib/python3.10/site-packages/skill_wikipedia/ui/jumping.gif"
+    },
+    "skill-ip_address.neongeckocom": {
+        "text": "192.168.86.50",
+        "title": "IP Address"
+    },
+    "skill-date_time.neongeckocom": {
+        "location": "",
+        "hours": "10",
+        "minutes": "45",
+        "ampm": "",
+        "date_string": "4/3/2024"
+    }
+}
