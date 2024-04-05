@@ -23,7 +23,7 @@ import AirIcon from '@mui/icons-material/Air'; // For wind
 import backgroundImage from './wallpaper/default.jpg'; // adjust the relative path as necessary
 import { CSSTransition } from 'react-transition-group';
 import NotificationModal from "../NotificationModal/NotificationModal";
-import SwipeableTopDrawer from "../SwipeableTemporaryDrawer/SwipeableTemporaryDrawer";
+import SwipeableTopDrawer from "../SwipeableTopDrawer/SwipeableTopDrawer";
 
 // TODO: Fix update of skill examples
 // TODO: Get notifications modal working
