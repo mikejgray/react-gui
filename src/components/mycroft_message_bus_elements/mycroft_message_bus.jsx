@@ -25,6 +25,8 @@ import { CSSTransition } from 'react-transition-group';
 import NotificationModal from "../NotificationModal/NotificationModal";
 import SwipeableTopDrawer from "../SwipeableTopDrawer/SwipeableTopDrawer";
 
+// TODO: Start abstracting out components
+// TODO: Create sleep screen on the left side
 // TODO: Fix update of skill examples
 // TODO: Get notifications modal working
 // TODO: Implement default OVOS screens
@@ -248,6 +250,7 @@ const MycroftMessageBus = () => {
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
 				backgroundRepeat: 'no-repeat',
+				height: '100%'
 			}}>
 				<Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4 }}>
 					{/* Notifications */}
@@ -260,19 +263,26 @@ const MycroftMessageBus = () => {
 						<Typography>{`${temperature}°`}</Typography>
 					</Stack>
 				</Stack>
-				{/* Digital Clock */}
-				<Typography variant="h3" component="h1" sx={{ fontWeight: 'bold', mb: 2 }}>
-					{time_string}{ampm_string}
-				</Typography>
-				{/* Date */}
-				<Typography variant="h5" component="h2" sx={{ mb: 1 }}>
-					{`${weekday_string}, ${day_string} ${month_string}, ${year_string}`}
-				</Typography>
-				<CSSTransition in={inProp} timeout={300} classNames="fade" onExited={updateRandomExample}>
-					<Typography sx={{ fontStyle: 'italic' }}>
-						Try saying: "{randomExample}"
+				<Box sx={{
+					position: 'absolute',
+					bottom: 0,
+					left: 0,
+					padding: '16px', // Add padding as needed
+				}}>
+					{/* Digital Clock */}
+					<Typography variant="h3" component="h1" sx={{ fontWeight: 'bold', mb: 2 }}>
+						{time_string}{ampm_string}
 					</Typography>
-				</CSSTransition>
+					{/* Date */}
+					<Typography variant="h5" component="h2" sx={{ mb: 1 }}>
+						{`${weekday_string}, ${day_string} ${month_string}, ${year_string}`}
+					</Typography>
+					<CSSTransition in={inProp} timeout={300} classNames="fade" onExited={updateRandomExample}>
+						<Typography sx={{ fontStyle: 'italic' }}>
+							Try saying: "{randomExample}"
+						</Typography>
+					</CSSTransition>
+				</Box>
 			</Box>
 			{/* {activeSkills && activeSkillState && (
 					<SkillComponent
