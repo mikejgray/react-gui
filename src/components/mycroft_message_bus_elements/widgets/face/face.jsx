@@ -7,6 +7,6 @@ import { Card, CardMedia } from "@mui/material";
 export function Face(props) {
 	let faceState =
 		(props.active === true) ? activeFace : restingFace;
-	return <Card className="face-card"><CardMedia src={faceState} /></Card>
+	return <Card className="face-card">:)<CardMedia src={faceState} /></Card>
 	// return <img src={faceState} className="face row" alt="logo" />;
 }

@@ -8,7 +8,6 @@ window.onerror = function (message, source, lineno, colno, error) {
   return false; // Do not prevent the default handler
 };
 
-
 export function App() {
   return <MycroftMessageBus />;
 }

@@ -6,7 +6,7 @@ export function WebsocketConnection(props) {
 	let websocketConnectionState = (props.connected === true);
 	const wsStatus = `Websocket Status: ${websocketConnectionState ? "Connected" : "Disconnected"}`
 	const color = websocketConnectionState ? "success" : "error";
-	return <div class="led-box">
+	return <>
 		<Chip color={color} icon={<LightbulbIcon />} title={wsStatus} label={wsStatus} variant="outlined" />
-	</div>;
+	</>;
 }
